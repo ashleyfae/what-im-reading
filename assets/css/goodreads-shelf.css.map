@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAEQ,4DAAoB;EAChB,KAAK,EAAE,IAAI;EACX,QAAQ,EAAE,MAAM;AAKpB,yCAAE;EACE,OAAO,EAAE,YAAY;EACrB,MAAM,EAAE,GAAG",
+"sources": ["goodreads-shelf.scss"],
+"names": [],
+"file": "goodreads-shelf.css"
+}

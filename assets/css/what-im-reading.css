@@ -1,0 +1,11 @@
+.widget_what_im_reading .grshelf-details .grshelf-shelf-book {
+  clear: both;
+  overflow: hidden; }
+.widget_what_im_reading .grshelf-covers a {
+  display: inline-block;
+  margin: 1px; }
+.widget_what_im_reading .gr-shelf-link {
+  margin: 1em 0 0 0;
+  text-align: center; }
+
+/*# sourceMappingURL=what-im-reading.css.map */

@@ -25,14 +25,6 @@ class What_Im_Reading {
 	public $_version;
 
 	/**
-	 * The token.
-	 * @var     string
-	 * @access  public
-	 * @since   1.0
-	 */
-	public $_token;
-
-	/**
 	 * The main plugin file.
 	 * @var     string
 	 * @access  public
@@ -67,7 +59,6 @@ class What_Im_Reading {
 	public function __construct( $file = '', $version = '1.0' ) {
 		// Load plugin environment variables.
 		$this->_version = $version;
-		$this->_token   = 'what-im-reading';
 
 		$this->file       = $file;
 		$this->dir        = dirname( $this->file );
@@ -116,7 +107,7 @@ class What_Im_Reading {
 	 * @return void
 	 */
 	public function load_plugin_textdomain() {
-		$domain = $this->_token;
+		$domain = 'what-im-reading';
 
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
@@ -132,7 +123,7 @@ class What_Im_Reading {
 	 * @return  void
 	 */
 	public function load_localisation() {
-		load_plugin_textdomain( $this->_token, false, plugin_basename( $this->file ) . '/lang/' );
+		load_plugin_textdomain( 'what-im-reading', false, plugin_basename( $this->file ) . '/lang/' );
 	}
 
 	/**
@@ -154,8 +145,7 @@ class What_Im_Reading {
 	 * @return void
 	 */
 	public function add_scripts_styles() {
-		wp_register_style( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'css/what-im-reading.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-frontend' );
+		wp_enqueue_style( 'what-im-reading-frontend', esc_url( $this->assets_url ) . 'css/what-im-reading.css', array(), $this->_version );
 	}
 
 	/**
@@ -172,7 +162,7 @@ class What_Im_Reading {
 
 		?>
 		<div class="update-nag">
-			<?php _e( 'You have the Ultimate Book Blogger Plugin installed, which has the Goodreads Shelf widget already built in. You can safetly deactivate the Goodreads Shelf plugin and use UBB instead.', $this->_token ); ?>
+			<?php _e( 'You have the Ultimate Book Blogger Plugin installed, which has the Goodreads Shelf widget already built in. You can safetly deactivate the Goodreads Shelf plugin and use UBB instead.', 'what-im-reading' ); ?>
 		</div>
 		<?php
 	}

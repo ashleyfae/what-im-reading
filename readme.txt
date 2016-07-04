@@ -40,6 +40,11 @@ The shelves only reload once every six hours.
 
 == Changelog ==
 
+= 1.0.1 =
+* Minor code adjustments.
+* Added a few actions and filters throughout the widget.
+* Change instances of $_token to the actual text domain.
+
 = 1.0.0 =
 * Initial release.
 

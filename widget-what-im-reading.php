@@ -1,21 +1,13 @@
 <?php
 
 /**
- * widget-what-im-reading.php
+ * Goodreads Shelf Widget
  *
  * @package   what-im-reading
  * @copyright Copyright (c) 2015, Ashley Evans
  * @license   GPL2+
  */
 class What_Im_Reading_Widget extends WP_Widget {
-
-	/**
-	 * The token.
-	 * @var     string
-	 * @access  public
-	 * @since   1.0
-	 */
-	public $_token;
 
 	/**
 	 * The Goodreads API key
@@ -57,12 +49,10 @@ class What_Im_Reading_Widget extends WP_Widget {
 	 */
 	public function __construct() {
 
-		$this->_token = 'what-im-reading';
-
 		parent::__construct(
 			'what_im_reading', // Base ID
-			__( 'Goodreads Shelf', $this->_token ), // Name
-			array( 'description' => __( 'Displays books from one of your Goodreads shelves', $this->_token ), ) // Args
+			__( 'Goodreads Shelf', 'what-im-reading' ), // Name
+			array( 'description' => __( 'Displays books from one of your Goodreads shelves', 'what-im-reading' ), ) // Args
 		);
 
 	}
@@ -96,7 +86,7 @@ class What_Im_Reading_Widget extends WP_Widget {
 
 		// If there's no API key filled out - bail.
 		if ( empty( $this->api_key ) ) {
-			echo '<p>' . __( 'Error: You need to enter your Goodreads API key in the widget settings.', $this->_token ) . '</p>';
+			echo '<p>' . __( 'Error: You need to enter your Goodreads API key in the widget settings.', 'what-im-reading' ) . '</p>';
 			echo $args['after_widget'];
 
 			return;
@@ -104,7 +94,7 @@ class What_Im_Reading_Widget extends WP_Widget {
 
 		// If there's no user ID filled out - bail.
 		if ( empty( $goodreads_id ) ) {
-			echo '<p>' . __( 'Error: You need to enter your Goodreads user ID number in the widget.', $this->_token ) . '</p>';
+			echo '<p>' . __( 'Error: You need to enter your Goodreads user ID number in the widget.', 'what-im-reading' ) . '</p>';
 			echo $args['after_widget'];
 
 			return;
@@ -115,9 +105,14 @@ class What_Im_Reading_Widget extends WP_Widget {
 		$this->limit        = $limit;
 
 		$shelf = $this->query_goodreads( $format );
+
+		do_action( 'what-im-reading/widget/before-shelf', $shelf, $format, $this );
+
 		echo '<div class="grshelf-' . sanitize_title( $format ) . '">' . $shelf . '</div>';
 
 		echo '<div class="gr-shelf-link"><a href="https://www.goodreads.com/review/list/' . urlencode( $goodreads_id ) . '?shelf=' . urlencode( $shelf ) . '" target="_blank">' . $link_text . '</a></div>';
+
+		do_action( 'what-im-reading/widget/after-shelf', $shelf, $format, $this );
 
 		echo $args['after_widget'];
 	}
@@ -133,14 +128,15 @@ class What_Im_Reading_Widget extends WP_Widget {
 	 * @return void
 	 */
 	public function form( $instance ) {
+
 		$instance     = wp_parse_args( (array) $instance, array(
-			'title'        => __( 'Currently Reading', $this->_token ),
+			'title'        => __( 'Currently Reading', 'what-im-reading' ),
 			'api_key'      => '',
 			'goodreads_id' => '',
 			'shelf'        => 'currently-reading',
 			'limit'        => 5,
 			'format'       => 'covers',
-			'link_text'    => __( 'Visit my shelf on Goodreads', $this->_token )
+			'link_text'    => __( 'Visit my shelf on Goodreads', 'what-im-reading' )
 		) );
 		$title        = $instance['title'];
 		$api_key      = $instance['api_key'];
@@ -149,15 +145,17 @@ class What_Im_Reading_Widget extends WP_Widget {
 		$limit        = $instance['limit'];
 		$format       = $instance['format'];
 		$link_text    = $instance['link_text'];
+
+		do_action( 'what-im-reading/widget/form/before', $instance, $this );
 		?>
 
 		<p>
-			<strong><?php _e( 'Instructions', $this->_token ); ?></strong> <br>
-			<?php printf( __( 'In order to use this widget you must first retrieve and enter your Goodreads API key. Read the <a href="%s" target="_blank">plugin instructions</a> for help on how to do this. In order for the plugin to retrieve the books from your shelf, you must also have your Goodreads profile set to public.' ), 'https://www.nosegraze.com/what-im-reading/' ); ?>
+			<strong><?php _e( 'Instructions', 'what-im-reading' ); ?></strong> <br>
+			<?php printf( __( 'In order to use this widget you must first retrieve and enter your Goodreads API key. Read the <a href="%s" target="_blank">plugin instructions</a> for help on how to do this. In order for the plugin to retrieve the books from your shelf, you must also have your Goodreads profile set to public.', 'what-im-reading' ), 'https://www.nosegraze.com/what-im-reading/' ); ?>
 		</p>
 
 		<p>
-			<?php _e( 'When prompted for your Goodreads user ID number, that is the set of digits in your Goodreads profile URL. Example:', $this->_token ); ?>
+			<?php _e( 'When prompted for your Goodreads user ID number, that is the set of digits in your Goodreads profile URL. Example:', 'what-im-reading' ); ?>
 		</p>
 
 		<p>
@@ -167,60 +165,62 @@ class What_Im_Reading_Widget extends WP_Widget {
 		</p>
 
 		<p>
-			<?php _e( 'The highlighted digits are the Goodreads ID number.', $this->_token ); ?>
+			<?php _e( 'The highlighted digits are the Goodreads ID number.', 'what-im-reading' ); ?>
 		</p>
 
 		<p>
-			<strong><?php _e( 'Your shelf information will update once every six hours.', $this->_token ); ?></strong>
+			<strong><?php _e( 'Your shelf information will update once every six hours.', 'what-im-reading' ); ?></strong>
 		</p>
 
 		<hr>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', $this->_token ); ?>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'what-im-reading' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'api_key' ); ?>"><?php _e( 'API Key:', $this->_token ); ?>
+			<label for="<?php echo $this->get_field_id( 'api_key' ); ?>"><?php _e( 'API Key:', 'what-im-reading' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'api_key' ); ?>" name="<?php echo $this->get_field_name( 'api_key' ); ?>" type="text" value="<?php echo esc_attr( $api_key ); ?>">
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'goodreads_id' ); ?>"><?php _e( 'Goodreads ID Number:', $this->_token ); ?>
+			<label for="<?php echo $this->get_field_id( 'goodreads_id' ); ?>"><?php _e( 'Goodreads ID Number:', 'what-im-reading' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'goodreads_id' ); ?>" name="<?php echo $this->get_field_name( 'goodreads_id' ); ?>" type="number" value="<?php echo esc_attr( $goodreads_id ); ?>">
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'shelf' ); ?>"><?php _e( 'Shelf Name:', $this->_token ); ?>
+			<label for="<?php echo $this->get_field_id( 'shelf' ); ?>"><?php _e( 'Shelf Name:', 'what-im-reading' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'shelf' ); ?>" name="<?php echo $this->get_field_name( 'shelf' ); ?>" type="text" value="<?php echo esc_attr( $shelf ); ?>">
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'limit' ); ?>"><?php _e( 'Maximum Number of Results (200 max):', $this->_token ); ?>
+			<label for="<?php echo $this->get_field_id( 'limit' ); ?>"><?php _e( 'Maximum Number of Results (200 max):', 'what-im-reading' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'limit' ); ?>" name="<?php echo $this->get_field_name( 'limit' ); ?>" type="number" value="<?php echo esc_attr( $limit ); ?>">
 			</label>
 		</p>
 
 		<p>
-			<?php _e( 'Format:', $this->_token ); ?> <br>
+			<?php _e( 'Format:', 'what-im-reading' ); ?> <br>
 			<input type="radio" <?php checked( $format, 'covers' ); ?> name="<?php echo $this->get_field_name( 'format' ); ?>" id="<?php echo $this->get_field_id( 'format' ); ?>_covers" value="covers">
-			<label for="<?php echo $this->get_field_id( 'format' ); ?>_covers"><?php _e( 'Book covers only', $this->_token ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'format' ); ?>_covers"><?php _e( 'Book covers only', 'what-im-reading' ); ?></label>
 			<br>
 			<input type="radio" <?php checked( $format, 'details' ); ?> name="<?php echo $this->get_field_name( 'format' ); ?>" id="<?php echo $this->get_field_id( 'format' ); ?>_details" value="details">
-			<label for="<?php echo $this->get_field_id( 'format' ); ?>_details"><?php _e( 'Cover, title, author', $this->_token ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'format' ); ?>_details"><?php _e( 'Cover, title, author', 'what-im-reading' ); ?></label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'link_text' ); ?>"><?php _e( 'Link Text (use "Goodreads" in the text to comply with their Terms of Service):', $this->_token ); ?>
+			<label for="<?php echo $this->get_field_id( 'link_text' ); ?>"><?php _e( 'Link Text (use "Goodreads" in the text to comply with their Terms of Service):', 'what-im-reading' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'link_text' ); ?>" name="<?php echo $this->get_field_name( 'link_text' ); ?>" type="text" value="<?php echo esc_attr( $link_text ); ?>">
 			</label>
 		</p>
 		<?php
+		do_action( 'what-im-reading/widget/form/after', $instance, $this );
+
 	}
 
 	/**
@@ -250,7 +250,7 @@ class What_Im_Reading_Widget extends WP_Widget {
 			delete_option( 'ubb_What_Im_Reading_widget_' . sanitize_title( $this->id ) );
 		}
 
-		return $instance;
+		return apply_filters( 'what-im-reading/widget/update', $instance, $new_instance, $old_instance, $this );
 	}
 
 	/**
@@ -319,7 +319,7 @@ class What_Im_Reading_Widget extends WP_Widget {
 		);
 		update_option( 'ubb_What_Im_Reading_widget_' . sanitize_title( $this->goodreads_id ), $new_value );
 
-		return $shelf_html;
+		return apply_filters( 'what-im-reading/widget/query-goodreads/html', $shelf_html, $books, $format, $this );
 	}
 
 	/**
@@ -358,7 +358,7 @@ class What_Im_Reading_Widget extends WP_Widget {
 					</a>
 
 					<span class="grshelf-book-title"><a href="<?php echo esc_url( $link ); ?>" target="_blank"><?php echo $title; ?></a></span>
-					<span class="grshelf-by"><?php _e( 'by', $this->_token ); ?></span>
+					<span class="grshelf-by"><?php _e( 'by', 'what-im-reading' ); ?></span>
 					<span class="grshelf-authors"><?php echo $authors; ?></span>
 				</div>
 				<?php
@@ -372,10 +372,10 @@ class What_Im_Reading_Widget extends WP_Widget {
 
 				$authors = implode( ', ', $author_names );
 				// The default format just shows one book after the other.
-				$shelf   = '<a href="' . esc_url( $link ) . '" target="_blank"><img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( strip_tags( sprintf( __( '%1$s by %2$s', $this->_token ), $title, $authors ) ) ) . '"></a>';
+				$shelf = '<a href="' . esc_url( $link ) . '" target="_blank"><img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( strip_tags( sprintf( __( '%1$s by %2$s', 'what-im-reading' ), $title, $authors ) ) ) . '"></a>';
 		}
 
-		return $shelf;
+		return apply_filters( 'what-im-reading/widget/format-book', $shelf, $book, $format, $this );
 	}
 
 }

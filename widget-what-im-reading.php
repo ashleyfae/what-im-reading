@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Goodreads Shelf Widget
  *
  * @package   what-im-reading
- * @copyright Copyright (c) 2015, Ashley Evans
+ * @copyright Copyright (c) 2020, Ashley Gibson
  * @license   GPL2+
  */
 class What_Im_Reading_Widget extends WP_Widget {
@@ -104,15 +103,15 @@ class What_Im_Reading_Widget extends WP_Widget {
 		$this->shelf        = $shelf;
 		$this->limit        = $limit;
 
-		$shelf = $this->query_goodreads( $format );
+		$books = $this->query_goodreads( $format );
 
-		do_action( 'what-im-reading/widget/before-shelf', $shelf, $format, $this );
+		do_action( 'what-im-reading/widget/before-shelf', $books, $format, $this );
 
-		echo '<div class="grshelf-' . sanitize_title( $format ) . '">' . $shelf . '</div>';
+		echo '<div class="grshelf-' . esc_attr( sanitize_html_class( $format ) ) . '">' . $books . '</div>';
 
 		echo '<div class="gr-shelf-link"><a href="https://www.goodreads.com/review/list/' . urlencode( $goodreads_id ) . '?shelf=' . urlencode( $shelf ) . '" target="_blank">' . $link_text . '</a></div>';
 
-		do_action( 'what-im-reading/widget/after-shelf', $shelf, $format, $this );
+		do_action( 'what-im-reading/widget/after-shelf', $books, $format, $this );
 
 		echo $args['after_widget'];
 	}
@@ -236,13 +235,13 @@ class What_Im_Reading_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance                 = array();
-		$instance['title']        = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-		$instance['api_key']      = ( ! empty( $new_instance['api_key'] ) ) ? strip_tags( $new_instance['api_key'] ) : '';
+		$instance['title']        = ( ! empty( $new_instance['title'] ) ) ? sanitize_text_field( $new_instance['title'] ) : '';
+		$instance['api_key']      = ( ! empty( $new_instance['api_key'] ) ) ? sanitize_text_field( $new_instance['api_key'] ) : '';
 		$instance['goodreads_id'] = is_numeric( $new_instance['goodreads_id'] ) ? intval( $new_instance['goodreads_id'] ) : null;
-		$instance['shelf']        = ( ! empty( $new_instance['shelf'] ) ) ? strip_tags( $new_instance['shelf'] ) : 'currently-reading';
-		$instance['limit']        = ( ! empty( $new_instance['limit'] ) && is_numeric( $new_instance['limit'] ) && $new_instance['limit'] >= 1 && $new_instance['limit'] <= 200 ) ? intval( strip_tags( $new_instance['limit'] ) ) : 5;
-		$instance['format']       = strip_tags( $new_instance['format'] );
-		$instance['link_text']    = strip_tags( $new_instance['link_text'] );
+		$instance['shelf']        = ( ! empty( $new_instance['shelf'] ) ) ? sanitize_text_field( $new_instance['shelf'] ) : 'currently-reading';
+		$instance['limit']        = ( ! empty( $new_instance['limit'] ) && is_numeric( $new_instance['limit'] ) && $new_instance['limit'] >= 1 && $new_instance['limit'] <= 200 ) ? intval( $new_instance['limit'] ) : 5;
+		$instance['format']       = sanitize_text_field( $new_instance['format'] );
+		$instance['link_text']    = sanitize_text_field( $new_instance['link_text'] );
 
 		// Delete the shelf cache when the widget is updated.
 		$this->goodreads_id = $instance['goodreads_id'];
@@ -317,7 +316,7 @@ class What_Im_Reading_Widget extends WP_Widget {
 			'shelf'   => $shelf_html,
 			'expires' => time() + $expiry_time_success
 		);
-		update_option( 'ubb_What_Im_Reading_widget_' . sanitize_title( $this->goodreads_id ), $new_value );
+		update_option( 'ubb_What_Im_Reading_widget_' . sanitize_title( $this->id ), $new_value );
 
 		return apply_filters( 'what-im-reading/widget/query-goodreads/html', $shelf_html, $books, $format, $this );
 	}
@@ -345,7 +344,7 @@ class What_Im_Reading_Widget extends WP_Widget {
 			case 'details' :
 				// Shows the cover floated to the left with book details to the right.
 				foreach ( $authors as $author ) {
-					$author_names[] = '<a href="' . $author->author->link . '" target="_blank">' . $author->author->name . '</a>';
+					$author_names[] = '<a href="' . esc_url( $author->author->link ) . '" target="_blank">' . esc_html( $author->author->name ) . '</a>';
 				}
 
 				$authors = implode( ', ', $author_names );
@@ -354,10 +353,10 @@ class What_Im_Reading_Widget extends WP_Widget {
 				?>
 				<div class="grshelf-shelf-book">
 					<a href="<?php echo esc_url( $link ); ?>" target="_blank">
-						<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php esc_attr_e( strip_tags( $title ) ); ?>" class="alignleft">
+						<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( strip_tags( $title ) ); ?>" class="alignleft">
 					</a>
 
-					<span class="grshelf-book-title"><a href="<?php echo esc_url( $link ); ?>" target="_blank"><?php echo $title; ?></a></span>
+					<span class="grshelf-book-title"><a href="<?php echo esc_url( $link ); ?>" target="_blank"><?php echo esc_html( $title ); ?></a></span>
 					<span class="grshelf-by"><?php _e( 'by', 'what-im-reading' ); ?></span>
 					<span class="grshelf-authors"><?php echo $authors; ?></span>
 				</div>

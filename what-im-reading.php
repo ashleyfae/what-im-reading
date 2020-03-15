@@ -11,7 +11,7 @@
  * Domain Path: lang
  *
  * @package   what-im-reading
- * @copyright Copyright (c) 2015, Ashley Evans
+ * @copyright Copyright (c) 2020, Ashley Evans
  * @license   GPL2+
  *
  * This program is free software; you can redistribute it and/or modify
@@ -41,9 +41,7 @@ require_once plugin_dir_path( __FILE__ ) . 'class-what-im-reading.php';
  * Returns the main instance of What_Im_Reading.
  */
 function What_Im_Reading() {
-	$instance = What_Im_Reading::instance( __FILE__, '1.0.1' );
-
-	return $instance;
+	return What_Im_Reading::instance( __FILE__, '1.0.1' );
 }
 
 What_Im_Reading();

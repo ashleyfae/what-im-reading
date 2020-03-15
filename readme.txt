@@ -35,6 +35,13 @@ The shelves only reload once every six hours.
 
 == Changelog ==
 
+= 1.0.2 =
+* Remove use of deprecated `create_function()`.
+* Minor code cleanup.
+* Fix widget caching.
+* Update plugin URI.
+* Fix incorrect URL in "Visit my shelf on Goodreads" link.
+
 = 1.0.1 =
 * Minor code adjustments.
 * Added a few actions and filters throughout the widget.

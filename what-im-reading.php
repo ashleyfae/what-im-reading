@@ -3,7 +3,7 @@
  * Plugin Name: What I'm Reading
  * Plugin URI: https://github.com/ashleyfae/what-im-reading/
  * Description: A widget for displaying books on one of your Goodreads shelves
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Ashley Gibson
  * Author URI: https://www.nosegraze.com
  * License: GPL2
@@ -41,7 +41,7 @@ require_once plugin_dir_path( __FILE__ ) . 'class-what-im-reading.php';
  * Returns the main instance of What_Im_Reading.
  */
 function What_Im_Reading() {
-	return What_Im_Reading::instance( __FILE__, '1.0.1' );
+	return What_Im_Reading::instance( __FILE__, '1.0.2' );
 }
 
 What_Im_Reading();

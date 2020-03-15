@@ -3,7 +3,7 @@
  * Main Plugin Class
  *
  * @package   what-im-reading
- * @copyright Copyright (c) 2020, Ashley Evans
+ * @copyright Copyright (c) 2020, Ashley Gibson
  * @license   GPL2+
  */
 class What_Im_Reading {

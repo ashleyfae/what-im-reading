@@ -4,9 +4,10 @@ A widget for displaying books on one of your Goodreads shelves.
 
 ## Installation
 
-1. Upload `what-im-reading` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to Appearance -> Widgets and add the 'Goodreads Shelf' widget to your sidebar
+1. Download the zip file from the latest release here: https://github.com/ashleyfae/what-im-reading/releases
+2. Go to Plugins > Add New and upload the zip file.
+3. Activate the plugin through the 'Plugins' menu in WordPress
+4. Go to Appearance -> Widgets and add the 'Goodreads Shelf' widget to your sidebar
 
 ## Frequently Asked Questions
 
@@ -23,5 +24,4 @@ The shelves only reload once every six hours.
 
 ## Changelog
 
-**1.0.0**
-* Initial release.
+https://github.com/ashleyfae/what-im-reading/releases

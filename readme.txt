@@ -3,7 +3,7 @@ Contributors: NoseGraze
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L2TL7ZBVUMG9C
 Tags: goodreads, books, reading
 Requires at least: 3.0
-Tested up to: 4.2
+Tested up to: 5.3.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -33,11 +33,6 @@ A widget for displaying books on one of your Goodreads shelves.
 
 The shelves only reload once every six hours.
 
-== Screenshots ==
-
-1. The view of the settings panel.
-2. A screenshot of the social share icons automatically added to the Twenty Fifteen theme. This also shows the default button styles applied.
-
 == Changelog ==
 
 = 1.0.1 =
@@ -47,5 +42,3 @@ The shelves only reload once every six hours.
 
 = 1.0.0 =
 * Initial release.
-
-== Upgrade Notice ==

@@ -1,17 +1,16 @@
 <?php
-
 /**
- * class-what-im-reading.php
+ * Main Plugin Class
  *
  * @package   what-im-reading
- * @copyright Copyright (c) 2015, Ashley Evans
+ * @copyright Copyright (c) 2020, Ashley Gibson
  * @license   GPL2+
  */
 class What_Im_Reading {
 
 	/**
 	 * The single instance of the plugin.
-	 * @var Naked_Social_Share
+	 * @var What_Im_Reading
 	 * @since 1.0
 	 */
 	private static $_instance = null;
@@ -56,6 +55,12 @@ class What_Im_Reading {
 	 */
 	public $assets_url;
 
+	/**
+	 * What_Im_Reading constructor.
+	 *
+	 * @param string $file
+	 * @param string $version
+	 */
 	public function __construct( $file = '', $version = '1.0' ) {
 		// Load plugin environment variables.
 		$this->_version = $version;
@@ -69,9 +74,9 @@ class What_Im_Reading {
 		$this->includes();
 
 		// Create the widget.
-		add_action( 'widgets_init',
-			create_function( '', 'return register_widget("What_Im_Reading_Widget");' )
-		);
+		add_action( 'widgets_init', function () {
+			register_widget( 'What_Im_Reading_Widget' );
+		} );
 
 		// Load front end JS & CSS
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts_styles' ) );
@@ -86,6 +91,9 @@ class What_Im_Reading {
 
 	/**
 	 * Sets up the main What_Im_Reading instance
+	 *
+	 * @param string $file
+	 * @param string $version
 	 *
 	 * @access public
 	 * @since  1.0
@@ -162,7 +170,7 @@ class What_Im_Reading {
 
 		?>
 		<div class="update-nag">
-			<?php _e( 'You have the Ultimate Book Blogger Plugin installed, which has the Goodreads Shelf widget already built in. You can safetly deactivate the Goodreads Shelf plugin and use UBB instead.', 'what-im-reading' ); ?>
+			<?php _e( 'You have the Ultimate Book Blogger Plugin installed, which has the Goodreads Shelf widget already built in. You can safely deactivate the Goodreads Shelf plugin and use UBB instead.', 'what-im-reading' ); ?>
 		</div>
 		<?php
 	}

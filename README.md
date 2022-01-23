@@ -2,6 +2,10 @@
 
 A widget for displaying books on one of your Goodreads shelves.
 
+## Important Note:
+
+Goodreads is no longer issuing new API keys so this plugin is no longer in development.
+
 ## Installation
 
 1. Download the zip file from the latest release here: https://github.com/ashleyfae/what-im-reading/releases
